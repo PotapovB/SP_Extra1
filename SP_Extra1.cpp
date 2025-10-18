@@ -16,20 +16,20 @@ struct EventSystem {
         delete[] handlers;
     }
 
-    static void registerHandler(EventSystem& system, void(*handler)()) {
-        if (system.count >= system.capacity)
+    void registerHandler(void(*handler)()) {
+        if (count >= capacity)
         {
             cout << "! Массив обработчиков переполнен." << endl;
             return;
         }
-        system.handlers[system.count] = handler;
-        system.count++;
+        handlers[count] = handler;
+        count++;
     }
 
-    static void triggerEvent(const EventSystem& system) {
-        for (int i = 0; i < system.count; i++)
+    void triggerEvent() {
+        for (int i = 0; i < count; i++)
         {
-            system.handlers[i]();
+            handlers[i]();
         }
     }
 };
@@ -96,11 +96,11 @@ int main()
     // Без аргументов
     EventSystem system(2);
     
-    EventSystem::registerHandler(system, onUserLogin);
-    EventSystem::registerHandler(system, onUserLogout);
-    EventSystem::registerHandler(system, onError);
+    system.registerHandler(onUserLogin);
+    system.registerHandler(onUserLogout);
+    system.registerHandler(onError);
 
-    EventSystem::triggerEvent(system);
+    system.triggerEvent();
 
     // С аргументами
     StringEventSystem string_system(2);
